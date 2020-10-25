@@ -28,9 +28,9 @@ def check_last_watered():
 
 @app.route("/sensor")
 def action():
-    status = water.get_status()
+    status = water.distance()
     message = ""
-    if (status == 1):
+    if (status <10):
         message = "Low Level, Fill Now"
     else:
         message = "Filled"
