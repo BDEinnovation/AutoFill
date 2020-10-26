@@ -42,7 +42,7 @@ def action():
 def action2():
     water.pump1_on()
     water.pump2_on()
-    templateData = template(text = "Filled Once")
+    templateData = template(text = "Primed")
     return render_template('main.html', **templateData)
 
 @app.route("/auto/water/<toggle>")

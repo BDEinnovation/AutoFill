@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
 import time
 import datetime
+import math
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
@@ -38,7 +39,7 @@ def pump1_on(pump_pin = 8, delay = 1):
     f.write("Last Filled {}".format(datetime.datetime.now().strftime("%m-%d-%Y, %I:%M %p")))
     f.close()
     GPIO.output(pump_pin, GPIO.LOW)
-    time.sleep(2) # time solenoid stays open
+    time.sleep(7) # time solenoid stays open
     GPIO.output(pump_pin, GPIO.HIGH)
    
 def pump2_on(pump_pin = 10, delay = 1):
@@ -58,8 +59,6 @@ def clean_on(pump2_pin = 10, delay =1):
     time.sleep(5) # time solenoid stays open
     GPIO.output(pump2_pin, GPIO.HIGH)
 
-print("Distance measurement in progress")
-
 GPIO.setup(TRIG,GPIO.OUT)                  
 GPIO.setup(ECHO,GPIO.IN)   
 
@@ -71,7 +70,7 @@ def auto_water():
 
         GPIO.output(TRIG, False)                 
         print("Waiting For Sensor To Settle")
-        time.sleep(30)                            
+        time.sleep(5)                            
 
         GPIO.output(TRIG, True)                  
         time.sleep(0.00001)                      
@@ -90,10 +89,10 @@ def auto_water():
         pulse_duration = pulse_end - pulse_start 
 
         distance = pulse_duration * 17150        
-        distance = round(distance, 2)            
+        distance = math.ceil(distance)            
 
         print('distance',distance)
 
-        if distance < 15:
+        if distance > 10:
             pump1_on(8)
             pump2_on(10)
